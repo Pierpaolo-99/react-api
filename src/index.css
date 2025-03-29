@@ -1,1 +1,15 @@
 @import 'bootstrap';
+
+.table img {
+    width: 100px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.table td {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
