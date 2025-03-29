@@ -19,6 +19,20 @@ export default function App() {
       })
   }
 
+  function deletePost(postSlug) {
+    fetch(`${base_api_url}${posts_endpoint}/${postSlug}`, {
+      method: 'DELETE',
+    })
+      .then((res) => {
+        if (res.ok) {
+          setPosts(posts.filter(post => post.slug !== postSlug))
+        } else {
+          console.error('Errore nella cancellazione del post')
+        }
+      })
+      .catch(err => console.error('Errore:', err))
+  }
+
   useEffect(() => {
     fetchData(base_api_url + posts_endpoint)
   }, [])
@@ -52,38 +66,52 @@ export default function App() {
 
       <main>
 
-        <div className="p-5 mb-4 bg-light rounded-3">
-          <div className="container-fluid py-5">
-            <h1 className="display-5 fw-bold">Welcome to My Blog</h1>
-            <p className="col-md-8 fs-4">
-              Discover the latest posts, news, and updates. Dive into a variety of topics and enjoy reading our curated content.
-            </p>
-            <button className="btn btn-primary btn-lg" type="button">
-              Explore Posts
-            </button>
+        <section className="jumbotron">
+          <div className="p-5 mb-4 bg-light rounded-3">
+            <div className="container-fluid py-5">
+              <h1 className="display-5 fw-bold">Welcome to My Blog</h1>
+              <p className="col-md-8 fs-4">
+                Discover the latest posts, news, and updates. Dive into a variety of topics and enjoy reading our curated content.
+              </p>
+              <button className="btn btn-primary btn-lg" type="button">
+                Explore Posts
+              </button>
+            </div>
           </div>
-        </div>
+        </section>
 
-        <div className="container mt-4">
-          <table className="table table-striped">
-            <thead className='table-dark'>
-              <tr>
-                <th>IMAGE</th>
-                <th>TITLE</th>
-                <th>CONTENT</th>
-              </tr>
-            </thead>
-            <tbody>
-              {posts.map(post => (
-                <tr key={post.slug}>
-                  <td><img src={base_api_url + img_endpoint + post.image} alt={post.title} className="table-img" /></td>
-                  <td><h5>{post.title}</h5></td>
-                  <td className="content-cell">{post.content}</td>
+        <section className="table">
+          <div className="container mt-4">
+            <table className="table table-striped">
+              <thead className='table-dark'>
+                <tr>
+                  <th>IMAGE</th>
+                  <th>TITLE</th>
+                  <th>CONTENT</th>
+                  <th>ACTIONS</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {posts.map(post => (
+                  <tr key={post.slug}>
+                    <td><img src={base_api_url + img_endpoint + post.image} alt={post.title} className="table-img" /></td>
+                    <td><h5>{post.title}</h5></td>
+                    <td className="content-cell">{post.content}</td>
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => deletePost(post.slug)}
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
       </main>
 
     </>
